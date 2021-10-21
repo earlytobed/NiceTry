@@ -28,7 +28,7 @@
                                             required
                                         ></v-text-field>
                                     </ValidationProvider>
-                                    <ValidationProvider name="Password" rules="required|minmax:6, 30">
+                                    <ValidationProvider name="Password" rules="required|minmax:1, 30">
                                         <v-text-field
                                             slot-scope="{
                                                 errors,
@@ -125,8 +125,7 @@ export default {
         },
         submit() {
             this.$store.dispatch('auth/login', this.user).then(
-                (response) => {
-                    console.log(response)
+                () => {
                     this.$router.push('/torrents')
                 },
                 error => {

@@ -24,14 +24,14 @@
           </v-badge>
 
           <v-list-item-content>
-            <v-list-item-title>{{currentUser.username}} (Insane)</v-list-item-title>
+            <v-list-item-title>{{ currentUser.username }} (Insane)</v-list-item-title>
             <v-list-item-subtitle>
               <v-icon x-small>fa-balance-scale</v-icon> 1926.8
               <v-icon x-small>fa-magic</v-icon> 1926.8 M
             </v-list-item-subtitle>
             <v-list-item-subtitle>
-              <v-icon small>mdi-arrow-up-bold-circle-outline</v-icon> 10.24 GB
-              <v-icon small>mdi-arrow-down-bold-circle-outline</v-icon> 10.24 GB
+              <v-icon small>mdi-arrow-up-bold-circle-outline</v-icon> {{ currentUser.uploaded }} GB
+              <v-icon small>mdi-arrow-down-bold-circle-outline</v-icon> {{ currentUser.downloaded }} GB
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -120,7 +120,7 @@ export default {
             }
         },
         currentUser () {
-            return this.$store.state.auth.user
+            return JSON.parse(this.$store.state.auth.userinfo)
         },
         items: {
             get () {

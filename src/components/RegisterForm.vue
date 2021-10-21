@@ -20,7 +20,7 @@
                                                 valid
                                             }"
                                             prepend-icon="mdi-email"
-                                            v-model="email"
+                                            v-model="user.email"
                                             :error-messages="errors"
                                             :success="valid"
                                             label="Email"
@@ -34,7 +34,7 @@
                                                 valid
                                             }"
                                             prepend-icon="mdi-account"
-                                            v-model="username"
+                                            v-model="user.username"
                                             :counter="20"
                                             :error-messages="errors"
                                             :success="valid"
@@ -49,7 +49,7 @@
                                                 valid
                                             }"
                                             prepend-icon="mdi-lock"
-                                            v-model="password"
+                                            v-model="user.password"
                                             :error-messages="errors"
                                             :success="valid"
                                             :counter="30"
@@ -109,6 +109,8 @@ import {
 
 import BackgroundImage from './BackgroundImage.vue'
 
+import User from '../models/user'
+
 extend('email', email)
 
 extend('confirmed', confirmed)
@@ -129,10 +131,8 @@ export default {
     data: () => ({
         show1: false,
         show2: false,
-        username: "",
-        password: "",
+        user: new User('', ''),
         password_confirmation: "",
-        email: ""
     }),
     components: {
         ValidationProvider,
@@ -152,6 +152,17 @@ export default {
         },
         async submit() {
             await this.$refs.obs.validate();
+            this.$store.dispatch('auth/register', this.user).then(
+                () => {
+                    this.$router.push('/')
+                },
+                error => {
+                    this.message =
+                        (error.response && error.response.data) ||
+                        error.message ||
+                        error.toString();
+                }
+            )
         }
     }
 };
