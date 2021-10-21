@@ -11,10 +11,10 @@ export default new Vuex.Store({
     sidebarItems: []
   },
   mutations: {
-    sidebar (state, val) {
+    sidebar(state, val) {
       state.sidebar = val
     },
-    sidebarItems (state, val) {
+    sidebarItems(state, val) {
       state.sidebarItems = val
     }
   },

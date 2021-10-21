@@ -8,21 +8,14 @@
       dark
     >
       <v-app-bar-nav-icon @click.stop="switchDrawer()" />
-      <v-toolbar-title
-        style="width: 300px"
-        class="ml-0 pl-4"
-      >
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">蝴蝶（HUDBT）</span>
       </v-toolbar-title>
       <v-spacer />
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
-      <v-btn
-        v-if="currentUser"
-        @click="handleLogout()"
-        icon
-        >
+      <v-btn v-if="currentUser" @click="handleLogout()" icon>
         <v-icon>mdi-exit-to-app</v-icon>
       </v-btn>
     </v-app-bar>
@@ -31,8 +24,8 @@
 </template>
 
 <script>
-import NavDrawer from '@/components/NavDrawer.vue'
-import AuthService from '@/services/auth.service.js'
+import NavDrawer from "@/components/NavDrawer.vue";
+import AuthService from "@/services/auth.service.js";
 
 export default {
   name: "app",
@@ -40,31 +33,31 @@ export default {
     source: String,
   },
   computed: {
-    currentUser () {
-      return AuthService.getUser()
-    }
+    currentUser() {
+      return AuthService.getUser();
+    },
   },
   methods: {
     switchDrawer() {
-      this.$store.state.sidebar = !this.$store.state.sidebar
+      this.$store.state.sidebar = !this.$store.state.sidebar;
     },
     handleLogout() {
-      this.$store.dispatch('auth/logout')
-      this.$router.push('/')
-    }
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/");
+    },
   },
   data: () => ({
-      dialog: false,
+    dialog: false,
   }),
   components: {
-    NavDrawer
+    NavDrawer,
   },
-}
+};
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
