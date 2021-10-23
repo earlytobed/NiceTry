@@ -1,6 +1,10 @@
 <template>
   <v-main>
-    <v-app> </v-app>
+    <v-app>
+      <transition mode="out-in">
+        <router-view />
+      </transition>
+    </v-app>
   </v-main>
 </template>
 
@@ -22,6 +26,11 @@ export default {
       },
       { icon: "mdi-help-circle-outline", text: "FAQ" },
       { icon: "mdi-settings", text: "User Settings", route: "/settings" },
+      {
+        icon: "mdi-file-upload-outline",
+        text: "Submit Torrent",
+        route: "/submit",
+      },
     ];
   },
   computed: {

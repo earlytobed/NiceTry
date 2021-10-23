@@ -55,6 +55,10 @@ export default [
       {
         path: '/preference',
         component: () => import(`@/components/PreferencePage.vue`)
+      },
+      {
+        path: '/submit',
+        component: () => import(`@/components/TorrentSubmitForm.vue`)
       }
     ]
   }

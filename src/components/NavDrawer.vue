@@ -29,9 +29,9 @@
           </v-list-item-subtitle>
           <v-list-item-subtitle>
             <v-icon small>mdi-arrow-up-bold-circle-outline</v-icon>
-            {{ currentUser.uploaded }} GB
+            {{ currentUser.uploaded }}
             <v-icon small>mdi-arrow-down-bold-circle-outline</v-icon>
-            {{ currentUser.downloaded }} GB
+            {{ currentUser.downloaded }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
