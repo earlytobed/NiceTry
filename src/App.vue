@@ -25,7 +25,6 @@
 
 <script>
 import NavDrawer from "@/components/NavDrawer.vue";
-import AuthService from "@/services/auth.service.js";
 
 export default {
   name: "app",
@@ -34,7 +33,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return AuthService.getUser();
+      return JSON.parse(this.$store.state.auth.userinfo);
     },
   },
   methods: {

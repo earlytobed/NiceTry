@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import AuthService from "@/services/auth.service.js";
+
 export default {
   name: "TorrentsView",
   created() {
@@ -24,7 +26,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return JSON.parse(this.$store.state.auth.userinfo);
+      return AuthService.getUser();
     },
   },
   mounted() {
