@@ -7,7 +7,7 @@ class AuthService {
   constructor() {
     this.session = axios.create({
       baseURL: API_URL,
-      timeout: 5000,
+      timeout: TIMEOUT,
       headers: authHeader()
     });
   }
@@ -16,7 +16,9 @@ class AuthService {
     return axios
       .post(API_URL + '/api/token/', {
         username: user.username,
-        password: user.password
+        password: user.password,
+        // FIXME: expires time
+        expires: 5,
       })
       .then(response => {
         if (response.status == 200) {
@@ -24,7 +26,7 @@ class AuthService {
             localStorage.setItem('access_token', response.data.access_token);
             this.session = axios.create({
               baseURL: API_URL,
-              timeout: 1000,
+              timeout: TIMEOUT,
               headers: { 'Authorization': 'Bearer ' + response.data.access_token }
             });
             localStorage.setItem('token_type', response.data.token_type);
@@ -54,6 +56,7 @@ class AuthService {
     localStorage.removeItem('token_type');
     localStorage.removeItem('userinfo');
     localStorage.removeItem('uid');
+    localStorage.removeItem('categories');
   }
 
   register(user) {
@@ -62,6 +65,19 @@ class AuthService {
       email: user.email,
       password: user.password
     });
+  }
+
+  getCategories() {
+    return this.session
+      .get(API_URL + '/api/category/')
+      .then(response => {
+        if (response.status == 200) {
+          if (response.data) {
+            localStorage.setItem('categories', JSON.stringify(response.data.data));
+          }
+        }
+        return JSON.stringify(response.data);
+      });
   }
 }
 

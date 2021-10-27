@@ -45,6 +45,7 @@
                             :success="valid"
                             accept="application/x-bittorrent"
                             label="Please upload your torrent file"
+                            truncate-length="60"
                           ></v-file-input>
                         </ValidationProvider>
                       </v-form>
@@ -60,40 +61,58 @@
                         >Register</v-btn
                       >
                     </v-card-actions> -->
-                      <!-- TODO: Better Implementation -->
-                      <div class: buttonGroup>
-                        <v-btn
-                          color="primary"
-                          v-if="!uploaded"
-                          @click="submitFile()"
-                          :loading="uploading"
-                          :disabled="invalid || !validated || uploading"
-                        >
-                          Upload
-                        </v-btn>
-                        <v-btn
-                          color="primary"
-                          v-if="uploaded"
-                          @click="e1 = 2"
-                          :disabled="invalid || !validated"
-                        >
-                          Next
-                        </v-btn>
-                        <!-- TODO: Notify server delete file id and cache -->
-                        <v-btn
-                          v-if="uploaded"
-                          @click="clearFile()"
-                          color="error"
-                        >
-                          Clear
-                        </v-btn>
-                      </div>
+                      <v-btn
+                        color="primary"
+                        class="mx-4"
+                        v-if="!uploaded"
+                        @click="submitFile()"
+                        :loading="uploading"
+                        :disabled="invalid || !validated || uploading"
+                      >
+                        Upload
+                      </v-btn>
+                      <v-btn
+                        color="primary"
+                        class="mx-4"
+                        v-if="uploaded"
+                        @click="e1 = 2"
+                        :disabled="invalid || !validated"
+                      >
+                        Next
+                      </v-btn>
+                      <!-- TODO: Notify server delete file id and cache -->
+                      <v-btn
+                        color="error"
+                        class="mx-4"
+                        v-if="uploaded"
+                        @click="clearFile()"
+                      >
+                        Clear
+                      </v-btn>
                     </v-stepper-content>
                   </ValidationObserver>
 
                   <v-stepper-content step="2">
                     <ValidationObserver ref="obs2">
                       <v-form>
+                        <v-row align="center">
+                          <v-col class="d-flex">
+                            <v-select
+                              prepend-icon="mdi-shape-outline"
+                              :items="categories"
+                              v-model="cid"
+                              label="Category"
+                              @change="fillSubCategories()"
+                            ></v-select>
+                          </v-col>
+                          <v-col class="d-flex">
+                            <v-select
+                              :items="sub_categories"
+                              v-model="scid"
+                              label="Sub-Category"
+                            ></v-select>
+                          </v-col>
+                        </v-row>
                         <ValidationProvider name="Title" rules="required">
                           <v-text-field
                             slot-scope="{ errors, valid }"
@@ -118,10 +137,19 @@
                           ></v-text-field>
                         </ValidationProvider>
                         <!-- TODO: Regex for IMDB link match -->
-                        <ValidationProvider name="IMDB Link">
+                        <ValidationProvider
+                          name="IMDB Link"
+                          v-if="
+                            template.get(cid) == 0 || template.get(scid) == 0
+                          "
+                          rules="required"
+                        >
                           <v-text-field
                             slot-scope="{ errors, valid }"
                             prepend-icon="mdi-lock"
+                            v-if="
+                              template.get(cid) == 0 || template.get(scid) == 0
+                            "
                             v-model="torrent.imdb_link"
                             :error-messages="errors"
                             :success="valid"
@@ -130,33 +158,30 @@
                           ></v-text-field>
                         </ValidationProvider>
                       </v-form>
-                      <div justify-space-around class: buttonGroup>
-                        <v-btn color="primary" @click="submitTorrent()">
-                          Submit
-                        </v-btn>
+                      <v-btn
+                        class="mx-4"
+                        color="primary"
+                        @click="submitTorrent()"
+                      >
+                        Submit
+                      </v-btn>
 
-                        <v-btn text @click="e1 = 1">
-                          Back
-                        </v-btn>
-                      </div>
+                      <v-btn text class="mx-4" @click="e1 = 1">
+                        Back
+                      </v-btn>
                     </ValidationObserver>
-
                   </v-stepper-content>
 
                   <v-stepper-content step="3">
-                    <v-card
-                      class="mb-12"
-                      color="grey lighten-1"
-                      height="200px"
-                    >
+                    <v-card class="mb-12" color="grey lighten-1" height="200px">
                       {{ result }}
                     </v-card>
 
-                    <v-btn color="primary" @click="e1 = 1">
+                    <v-btn color="primary" class="mx-4" @click="e1 = 1">
                       Continue
                     </v-btn>
 
-                    <v-btn text @click="e1 = 2">
+                    <v-btn text class="mx-4" @click="e1 = 2">
                       Back
                     </v-btn>
                   </v-stepper-content>
@@ -194,17 +219,12 @@
 <script>
 import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
 
-import { required, email, confirmed, mimes } from "vee-validate/dist/rules";
+import { required, confirmed, mimes } from "vee-validate/dist/rules";
 
 import Torrent from "../models/torrent";
 
 import UploadService from "../services/upload.service";
 import AuthService from "../services/auth.service";
-
-const USERNAME_REGEX = /^[a-zA-Z0-9_]+$/;
-const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).+$/;
-
-extend("email", email);
 
 extend("mimes", {
   ...mimes,
@@ -232,22 +252,6 @@ extend("max", {
   message: "The {_field_} must have at most {max} characters",
 });
 
-extend("name", {
-  validate(value) {
-    return USERNAME_REGEX.test(value);
-  },
-  message:
-    "The {_field_} should only contain upper / lower letters / digit / underscore",
-});
-
-extend("pass", {
-  validate(value) {
-    return PASSWORD_REGEX.test(value);
-  },
-  message:
-    "The {_field_} must contain at least a upper letter, a lower letter and a digit",
-});
-
 extend("required", {
   ...required,
   message: "This field is required",
@@ -257,68 +261,104 @@ export default {
   data: () => ({
     e1: 1,
     torrent: new Torrent("", "", "", "", 0, "", ""),
-    torrentfile: "",
+    torrentfile: null,
     dialog: false,
     error_message: "",
     uploaded: false,
     uploading: false,
     result: "",
+    categories: [],
+    sub_categories: [],
+    template: new Map(),
+    cid: 1,
+    scid: 0,
   }),
   components: {
     ValidationProvider,
     ValidationObserver,
   },
   methods: {
+    async fillCategories() {
+      const _categories = JSON.parse(localStorage.getItem("categories"));
+      _categories.forEach((i) => {
+        this.categories.push({
+          value: i.cid,
+          text: i.name,
+        });
+        this.template.set(i.cid, i.template_id);
+      });
+    },
+    async fillSubCategories() {
+      this.scid = 0;
+      this.sub_categories = new Array();
+      const _categories = JSON.parse(localStorage.getItem("categories"));
+      _categories.forEach((i) => {
+        if (i.cid == this.cid) {
+          i.subcategory.forEach((j) => {
+            this.sub_categories.push({
+              value: j.cid,
+              text: j.name,
+            });
+            this.template.set(j.cid, j.template_id);
+          });
+        }
+      });
+    },
     async submitFile() {
       await this.$refs.obs1.validate();
       let torrentFile = new FormData();
       torrentFile.append("file", this.torrentfile);
       this.uploading = true;
       UploadService.upload(torrentFile).then((response) => {
+        if (response.name == "Error") {
+          this.uploading = false;
+          this.uploaded = false;
+          this.error_message =
+            "Upload failed, please check your network and try again.";
+          this.dialog = true;
+          return;
+        }
         this.torrent.name = response.name;
         this.torrent.file_id = response.id;
         this.uploaded = true;
         this.uploading = false;
         this.e1 = 2;
-      }).catch((error) => {
-        if (error) {
-          this.uploading = false;
-          this.uploaded = false;
-          return;
-        }
       });
     },
     async clearFile() {
-      this.torrentfile = "";
+      this.torrentfile = null;
       this.uploaded = false;
       this.torrent = new Torrent("", "", "", "", "", "", "");
     },
     async submitTorrent() {
       await this.$refs.obs2.validate();
-      AuthService.session.post("/api/torrent/create_torrent", this.torrent, {})
-      // TODO: Torrent already exists
-      .then(response => {
+      if (this.scid != 0) {
+        this.torrent.category = this.scid;
+      } else {
+        this.torrent.category = this.cid;
+      }
+      AuthService.session
+        .post("/api/torrent/create_torrent", this.torrent, {})
+        // TODO: Torrent already exists
+        .then((response) => {
           if (response.status == 200) {
             console.log(response);
-            AuthService.session.get("/api/torrent/torrent_detail/" + response.data.id).then(response => {
-              this.result = JSON.stringify(response.data);
-            })
+            AuthService.session
+              .get("/api/torrent/torrent_detail/" + response.data.id)
+              .then((response) => {
+                this.result = JSON.stringify(response.data);
+              });
             this.e1 = 3;
           }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
+  },
+  mounted() {
+    this.fillCategories();
+    this.fillSubCategories();
   },
 };
 </script>
-
-<style scoped>
-  .buttonGroup {
-    justify-content: space-around;
-    display: flex;
-    margin: auto;
-    max-width: 200pt;
-  }
-</style>

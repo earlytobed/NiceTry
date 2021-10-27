@@ -37,11 +37,15 @@ export default {
     currentUser() {
       return AuthService.getUser();
     },
+    getCategories() {
+      return AuthService.getCategories();
+    },
   },
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/");
     }
+    this.getCategories;
   },
   methods: {},
 };
