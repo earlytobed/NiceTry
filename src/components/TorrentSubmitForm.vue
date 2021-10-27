@@ -61,34 +61,30 @@
                         >Register</v-btn
                       >
                     </v-card-actions> -->
-                      <v-btn
-                        color="primary"
-                        class="mx-4"
-                        v-if="!uploaded"
-                        @click="submitFile()"
-                        :loading="uploading"
-                        :disabled="invalid || !validated || uploading"
-                      >
-                        Upload
-                      </v-btn>
-                      <v-btn
-                        color="primary"
-                        class="mx-4"
-                        v-if="uploaded"
-                        @click="e1 = 2"
-                        :disabled="invalid || !validated"
-                      >
-                        Next
-                      </v-btn>
-                      <!-- TODO: Notify server delete file id and cache -->
-                      <v-btn
-                        color="error"
-                        class="mx-4"
-                        v-if="uploaded"
-                        @click="clearFile()"
-                      >
-                        Clear
-                      </v-btn>
+                      <template v-if="!uploaded">
+                        <v-btn
+                          color="primary"
+                          v-if="!uploaded"
+                          @click="submitFile()"
+                          :loading="uploading"
+                          :disabled="invalid || !validated || uploading"
+                        >
+                          Upload
+                        </v-btn>
+                      </template>
+                      <template v-if="uploaded">
+                        <v-btn
+                          color="primary"
+                          @click="e1 = 2"
+                          :disabled="invalid || !validated"
+                        >
+                          Next
+                        </v-btn>
+                        <!-- TODO: Notify server delete file id and cache -->
+                        <v-btn color="error" @click="clearFile()">
+                          Clear
+                        </v-btn>
+                      </template>
                     </v-stepper-content>
                   </ValidationObserver>
 
@@ -157,6 +153,20 @@
                             label="IMDB Link"
                           ></v-text-field>
                         </ValidationProvider>
+                        <ValidationProvider
+                          name="Description"
+                          rules="required"
+                          class="px-4"
+                        >
+                          <tiptap-vuetify
+                            slot-scope="{ errors, valid }"
+                            v-model="torrent.desc"
+                            :error-messages="errors"
+                            :success="valid"
+                            :extensions="extensions"
+                            label="Description"
+                          />
+                        </ValidationProvider>
                       </v-form>
                       <v-btn
                         class="mx-4"
@@ -221,6 +231,25 @@ import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
 
 import { required, confirmed, mimes } from "vee-validate/dist/rules";
 
+import {
+  TiptapVuetify,
+  Heading,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  Code,
+  Paragraph,
+  BulletList,
+  OrderedList,
+  ListItem,
+  Link,
+  Blockquote,
+  HardBreak,
+  HorizontalRule,
+  History,
+} from "tiptap-vuetify";
+
 import Torrent from "../models/torrent";
 
 import UploadService from "../services/upload.service";
@@ -260,6 +289,30 @@ extend("required", {
 export default {
   data: () => ({
     e1: 1,
+    extensions: [
+      History,
+      Blockquote,
+      Link,
+      Underline,
+      Strike,
+      Italic,
+      ListItem,
+      BulletList,
+      OrderedList,
+      [
+        Heading,
+        {
+          options: {
+            levels: [1, 2, 3],
+          },
+        },
+      ],
+      Bold,
+      Code,
+      HorizontalRule,
+      Paragraph,
+      HardBreak,
+    ],
     torrent: new Torrent("", "", "", "", 0, "", ""),
     torrentfile: null,
     dialog: false,
@@ -276,6 +329,7 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    TiptapVuetify,
   },
   methods: {
     async fillCategories() {

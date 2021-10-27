@@ -56,10 +56,10 @@ export default {
 
 <style lang="scss">
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: Inter, "SF Pro Display", Roboto, "Ping Fang SC", "Sarasa UI SC",
+    "Noto Sans CJK", "Source Han Sans SC", "Source Han Sans CN", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 

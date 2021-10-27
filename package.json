@@ -12,6 +12,7 @@
     "@mdi/font": "^6.3.95",
     "axios": "^0.23.0",
     "core-js": "^3.6.5",
+    "tiptap-vuetify": "^2.24.0",
     "vee-validate": "^3.4.13",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
