@@ -53,8 +53,7 @@
           v-else-if="item.children"
           :key="item.text"
           v-model="item.model"
-          :prepend-icon="item.model ? item.icon : item['icon-alt']"
-          append-icon=""
+          :prepend-icon="item.icon"
         >
           <template v-slot:activator>
             <v-list-item-content>
@@ -63,10 +62,15 @@
               </v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item v-for="(child, i) in item.children" :key="i" link>
-            <v-list-item-action v-if="child.icon">
+          <v-list-item
+            v-for="(child, i) in item.children"
+            :key="i"
+            link
+            class="pl-9"
+          >
+            <v-list-item-icon v-if="child.icon">
               <v-icon>{{ child.icon }}</v-icon>
-            </v-list-item-action>
+            </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>
                 {{ child.text }}
@@ -75,9 +79,9 @@
           </v-list-item>
         </v-list-group>
         <v-list-item v-else :key="item.text" :to="item.route" link>
-          <v-list-item-action>
+          <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
+          </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
               {{ item.text }}

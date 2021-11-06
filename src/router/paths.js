@@ -53,6 +53,10 @@ export default [
     component: () => import(`@/views/TorrentsView.vue`),
     children: [
       {
+        path: '',
+        component: () => import(`@/components/TorrentsList.vue`)
+      },
+      {
         path: '/preference',
         component: () => import(`@/components/PreferencePage.vue`)
       },
