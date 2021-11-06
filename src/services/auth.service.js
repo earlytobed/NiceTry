@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:8000';
+const TIMEOUT = 10000;
 
 class AuthService {
   constructor() {
@@ -77,6 +77,18 @@ class AuthService {
           }
         }
         return JSON.stringify(response.data);
+      });
+  }
+
+  getTrending(v) {
+    return this.session
+      .get(API_URL + '/api/torrent/trending/', { params: { keyword: v } })
+      .then(response => {
+        if (response.status == 200) {
+          if (response.data) {
+            return response.data;
+          }
+        }
       });
   }
 }

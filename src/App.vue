@@ -8,12 +8,16 @@
       dark
     >
       <v-app-bar-nav-icon @click.stop="switchDrawer()" />
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">蝴蝶（HUDBT）</span>
+      <v-toolbar-title
+        style="width: 300px"
+        class="ml-0 pl-4 hidden-sm-and-down"
+      >
+        <span>蝴蝶（HUDBT）</span>
       </v-toolbar-title>
       <v-spacer />
+      <SearchBar v-if="currentUser" />
       <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
+        <v-icon>mdi-bell-outline</v-icon>
       </v-btn>
       <v-btn v-if="currentUser" @click="handleLogout()" icon>
         <v-icon>mdi-exit-to-app</v-icon>
@@ -25,6 +29,7 @@
 
 <script>
 import NavDrawer from "@/components/NavDrawer.vue";
+import SearchBar from "@/components/SearchBar.vue";
 
 export default {
   name: "app",
@@ -50,6 +55,7 @@ export default {
   }),
   components: {
     NavDrawer,
+    SearchBar,
   },
 };
 </script>
@@ -60,6 +66,7 @@ export default {
     "Noto Sans CJK", "Source Han Sans SC", "Source Han Sans CN", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
   color: #2c3e50;
 }
 
@@ -74,5 +81,9 @@ export default {
       color: #42b983;
     }
   }
+}
+
+.tiptap-vuetify-editor__content {
+  text-align: left;
 }
 </style>
