@@ -1,7 +1,9 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const TIMEOUT = 10000;
+const TIMEOUT = process.env.VUE_APP_AXIOS_TIMEOUT;
+const API_URL = process.env.VUE_APP_API_URL;
+const USER_EXPIRE_TIME = process.env.VUE_APP_USER_EXPIRE_TIME;
 
 class AuthService {
   constructor() {
@@ -18,7 +20,7 @@ class AuthService {
         username: user.username,
         password: user.password,
         // FIXME: expires time
-        expires: 5,
+        expires: USER_EXPIRE_TIME,
       })
       .then(response => {
         if (response.status == 200) {
@@ -82,7 +84,7 @@ class AuthService {
 
   getTrending(v) {
     return this.session
-      .get(API_URL + '/api/torrent/trending/', { params: { keyword: v } })
+      .get(API_URL + '/api/torrent/trending', { params: { keyword: v } })
       .then(response => {
         if (response.status == 200) {
           if (response.data) {
