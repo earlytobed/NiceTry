@@ -21,7 +21,9 @@
 
         <v-list-item-content>
           <v-list-item-title
-            >{{ currentUser.username }} (Insane)</v-list-item-title
+            >{{ currentUser.username }} ({{
+              currentUser.role.name
+            }})</v-list-item-title
           >
           <v-list-item-subtitle>
             <v-icon x-small>fa-balance-scale</v-icon> 1926.8

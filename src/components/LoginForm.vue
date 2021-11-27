@@ -92,7 +92,7 @@ import { required, email } from "vee-validate/dist/rules";
 
 import BackgroundImage from "./BackgroundImage.vue";
 
-import User from "../models/user";
+import User from "@/models/user";
 
 extend("email", email);
 
