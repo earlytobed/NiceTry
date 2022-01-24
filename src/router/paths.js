@@ -16,7 +16,7 @@ export default [
       path: '/torrents'
     }
   },
-  // This  allows you to have pages apart of the app but no rendered inside the dash
+  // This allows you to have pages apart of the app but no rendered inside the dash
   {
     path: '/',
     meta: {
@@ -63,6 +63,20 @@ export default [
       {
         path: '/submit',
         component: () => import(`@/components/TorrentSubmitForm.vue`)
+      }
+    ]
+  },
+  {
+    path: '/faq',
+    meta: {
+      name: 'FAQ',
+      requiresAuth: true
+    },
+    component: () => import('@/views/FAQView.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/components/DisplayPage.vue')
       }
     ]
   }

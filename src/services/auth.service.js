@@ -93,6 +93,16 @@ class AuthService {
         }
       });
   }
+
+  getFAQ() {
+    return this.session.get(API_URL + '/api/faq').then(response => {
+      if (response.status == 200) {
+        if (response.data) {
+          return response.data;
+        }
+      }
+    })
+  }
 }
 
 export default new AuthService();

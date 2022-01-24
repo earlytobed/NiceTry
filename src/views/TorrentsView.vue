@@ -22,7 +22,7 @@ export default {
           { icon: "mdi-music-note-outline", text: "Musics" },
         ],
       },
-      { icon: "mdi-help-circle-outline", text: "FAQ" },
+      { icon: "mdi-help-circle-outline", text: "FAQ", route: "/faq" },
       { icon: "mdi-cog-outline", text: "User Settings", route: "/settings" },
       {
         icon: "mdi-file-upload-outline",
